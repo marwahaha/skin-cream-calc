@@ -191,6 +191,16 @@
         recalculate();
     }
 
+    function afterNoneButtonPressed(obj) {
+        var bodyregion = obj.parentNode.parentNode.dataset['bodyregion'];
+        var buttons = obj.parentNode.parentNode.children[1];
+        for (idx = 0; idx < buttons.children.length; idx++) {
+            buttons.children[idx].className = "btn btn-outline-dark";
+            bodyparts[bodyregion][buttons.children[idx].innerText] = false;
+        }
+        recalculate();
+    }
+
     function getSum() {
         s = 0;
         var keys1 = Object.keys(CONVERSION);
@@ -245,8 +255,9 @@
                         <button type="button" class="btn btn-outline-dark" onclick="afterButtonPressed(this)">Face</button>
                         <button type="button" class="btn btn-outline-dark" onclick="afterButtonPressed(this)">Neck</button>
                     </div>
-                    <div class="allbutton col col-3">
+                    <div class="allbutton btn-group col col-3">
                         <button type="button" class="btn btn-outline-secondary" onclick="afterAllButtonPressed(this)">All</button>
+                        <button type="button" class="btn btn-outline-secondary" onclick="afterNoneButtonPressed(this)">None</button>
                     </div>
                 </div>
                 <hr>
@@ -259,8 +270,9 @@
                         <button type="button" class="btn btn-outline-dark" onclick="afterButtonPressed(this)">Groin</button>
                         <button type="button" class="btn btn-outline-dark" onclick="afterButtonPressed(this)">Butt</button>
                     </div>
-                    <div class="allbutton col col-3">
+                    <div class="allbutton btn-group col col-3">
                         <button type="button" class="btn btn-outline-secondary" onclick="afterAllButtonPressed(this)">All</button>
+                        <button type="button" class="btn btn-outline-secondary" onclick="afterNoneButtonPressed(this)">None</button>
                     </div>
                 </div>
                 <hr>
@@ -272,8 +284,9 @@
                         <button type="button" class="btn btn-outline-dark" onclick="afterButtonPressed(this)">Elbow</button>
                         <button type="button" class="btn btn-outline-dark" onclick="afterButtonPressed(this)">Upper arm</button>
                     </div>
-                    <div class="allbutton col col-3">
+                    <div class="allbutton btn-group col col-3">
                         <button type="button" class="btn btn-outline-secondary" onclick="afterAllButtonPressed(this)">All</button>
+                        <button type="button" class="btn btn-outline-secondary" onclick="afterNoneButtonPressed(this)">None</button>
                     </div>
                 </div>
                 <hr>
@@ -285,8 +298,9 @@
                         <button type="button" class="btn btn-outline-dark" onclick="afterButtonPressed(this)">Elbow</button>
                         <button type="button" class="btn btn-outline-dark" onclick="afterButtonPressed(this)">Upper arm</button>
                     </div>
-                    <div class="allbutton col col-3">
+                    <div class="allbutton btn-group col col-3">
                         <button type="button" class="btn btn-outline-secondary" onclick="afterAllButtonPressed(this)">All</button>
+                        <button type="button" class="btn btn-outline-secondary" onclick="afterNoneButtonPressed(this)">None</button>
                     </div>
                 </div>
                 <hr />
@@ -298,8 +312,9 @@
                         <button type="button" class="btn btn-outline-dark" onclick="afterButtonPressed(this)">Knee</button>
                         <button type="button" class="btn btn-outline-dark" onclick="afterButtonPressed(this)">Upper leg</button>
                     </div>
-                    <div class="allbutton col col-3">
+                    <div class="allbutton btn-group col col-3">
                         <button type="button" class="btn btn-outline-secondary" onclick="afterAllButtonPressed(this)">All</button>
+                        <button type="button" class="btn btn-outline-secondary" onclick="afterNoneButtonPressed(this)">None</button>
                     </div>
                 </div>
                 <hr />
@@ -311,8 +326,9 @@
                         <button type="button" class="btn btn-outline-dark" onclick="afterButtonPressed(this)">Knee</button>
                         <button type="button" class="btn btn-outline-dark" onclick="afterButtonPressed(this)">Upper leg</button>
                     </div>
-                    <div class="allbutton col col-3">
+                    <div class="allbutton btn-group col col-3">
                         <button type="button" class="btn btn-outline-secondary" onclick="afterAllButtonPressed(this)">All</button>
+                        <button type="button" class="btn btn-outline-secondary" onclick="afterNoneButtonPressed(this)">None</button>
                     </div>
                 </div>
                 <hr />
