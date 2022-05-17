@@ -89,44 +89,128 @@
         })(Object, Math.max, Math.min)
     }
 
-    var CREAM_PER_BODY_APPLICATION = 25; // 25g/body; one adult hand print (0.25g) is ~1% of body
+    // source: https://dermnetnz.org/topics/fingertip-unit
+    var CREAM_PER_BODY_APPLICATION = {
+        "Adult": 20,
+        "Child (age 5)": 20 / 3,
+        "Infant": 20 / 4
+    }
 
+    // source: https://www.uptodate.com/contents/image?imageKey=SURG%2F71190#!
     var CONVERSION = {
-        'headneck': {
-            'Scalp': 3.5,
-            'Face': 3.5,
-            'Neck': 2,
+        "Adult": {
+            'headneck': {
+                'Scalp': 3.5,
+                'Face': 3.5,
+                'Neck': 2,
+            },
+            'midsection': {
+                'Chest': 8,
+                'Belly': 5,
+                'Back': 13,
+                'Groin': 1,
+                'Butt': 5
+            },
+            'leftarm': {
+                'Hand': 2.5,
+                'Lower arm': 2.5,
+                'Elbow': 1,
+                'Upper arm': 3.5
+            },
+            'rightarm': {
+                'Hand': 2.5,
+                'Lower arm': 2.5,
+                'Elbow': 1,
+                'Upper arm': 3.5
+            },
+            'leftleg': {
+                'Foot': 3.5,
+                'Lower leg': 6,
+                'Knee': 1,
+                'Upper leg': 8.5
+            },
+            'rightleg': {
+                'Foot': 3.5,
+                'Lower leg': 6,
+                'Knee': 1,
+                'Upper leg': 8.5
+            }
         },
-        'midsection': {
-            'Chest': 13,
-            'Belly': 5,
-            'Back': 13,
-            'Groin': 1,
-            'Butt': 5
+        "Child (age 5)": {
+            'headneck': {
+                'Scalp': 6.5,
+                'Face': 6.5,
+                'Neck': 2,
+            },
+            'midsection': {
+                'Chest': 8,
+                'Belly': 5,
+                'Back': 13,
+                'Groin': 1,
+                'Butt': 5
+            },
+            'leftarm': {
+                'Hand': 2.5,
+                'Lower arm': 3.5,
+                'Elbow': 1,
+                'Upper arm': 4.5
+            },
+            'rightarm': {
+                'Hand': 2.5,
+                'Lower arm': 3.5,
+                'Elbow': 1,
+                'Upper arm': 4.5
+            },
+            'leftleg': {
+                'Foot': 3.5,
+                'Lower leg': 4.5,
+                'Knee': 1,
+                'Upper leg': 7.5
+            },
+            'rightleg': {
+                'Foot': 3.5,
+                'Lower leg': 4.5,
+                'Knee': 1,
+                'Upper leg': 7.5
+            }
         },
-        'leftarm': {
-            'Hand': 2.5,
-            'Lower arm': 3,
-            'Elbow': 1, // Kunal: I just set this to 1%
-            'Upper arm': 4
-        },
-        'rightarm': {
-            'Hand': 2.5,
-            'Lower arm': 3,
-            'Elbow': 1,// Kunal: I just set this to 1%
-            'Upper arm': 4
-        },
-        'leftleg': {
-            'Foot': 3.5,
-            'Lower leg': 6.5,
-            'Knee': 1,// Kunal: I just set this to 1%
-            'Upper leg': 9.5
-        },
-        'rightleg': {
-            'Foot': 3.5,
-            'Lower leg': 6.5,
-            'Knee': 1,// Kunal: I just set this to 1%
-            'Upper leg': 9.5
+        "Infant": {
+            'headneck': {
+                'Scalp': 9.5,
+                'Face': 9.5,
+                'Neck': 2,
+            },
+            'midsection': {
+                'Chest': 8,
+                'Belly': 5,
+                'Back': 13,
+                'Groin': 1,
+                'Butt': 4
+            },
+            'leftarm': {
+                'Hand': 2.5,
+                'Lower arm': 2.5,
+                'Elbow': 1,
+                'Upper arm': 3.5
+            },
+            'rightarm': {
+                'Hand': 2.5,
+                'Lower arm': 2.5,
+                'Elbow': 1,
+                'Upper arm': 3.5
+            },
+            'leftleg': {
+                'Foot': 3.5,
+                'Lower leg': 4.5,
+                'Knee': 1,
+                'Upper leg': 5
+            },
+            'rightleg': {
+                'Foot': 3.5,
+                'Lower leg': 4.5,
+                'Knee': 1,
+                'Upper leg': 5
+            }
         }
     };
 
@@ -168,6 +252,7 @@
             'Upper leg': false
         }
     };
+    var bodysize = "Adult";
 
     function afterButtonPressed(obj) {
         var bodyregion = obj.parentNode.parentNode.dataset['bodyregion'];
@@ -201,28 +286,37 @@
         recalculate();
     }
 
+    function afterSizeButtonPressed(obj) {
+        var buttons = obj.parentNode.children;
+        for (idx = 0; idx < buttons.length; idx++) {
+            buttons[idx].className = "btn btn-outline-dark";
+        }
+        obj.className = "btn btn-outline-dark active";
+        bodysize = obj.innerText;
+        recalculate();
+    }
+
     function getSum() {
         s = 0;
-        var keys1 = Object.keys(CONVERSION);
+        var keys1 = Object.keys(CONVERSION[bodysize]);
         for (var i = 0; i < keys1.length; i++) {
-            var keys2 = Object.keys(CONVERSION[keys1[i]]);
+            var keys2 = Object.keys(CONVERSION[bodysize][keys1[i]]);
             for (var j = 0; j < keys2.length; j++) {
-                s += CONVERSION[keys1[i]][keys2[j]];
+                s += CONVERSION[bodysize][keys1[i]][keys2[j]];
             }
         }
-        // Note: this adds up over 100%! (currently 108%)
+        // Note: this adds up around 98% for adults;
         return s;
     }
 
     function calculateFractionOfBody() {
-        // source: https://www.elitelearning.com/wp-content/uploads/2019/10/4.jpg
         percent = 0;
-        var keys1 = Object.keys(CONVERSION);
+        var keys1 = Object.keys(CONVERSION[bodysize]);
         for (var i = 0; i < keys1.length; i++) {
-            var keys2 = Object.keys(CONVERSION[keys1[i]]);
+            var keys2 = Object.keys(CONVERSION[bodysize][keys1[i]]);
             for (var j = 0; j < keys2.length; j++) {
                 if (bodyparts[keys1[i]][keys2[j]]) {
-                    percent += CONVERSION[keys1[i]][keys2[j]];
+                    percent += CONVERSION[bodysize][keys1[i]][keys2[j]];
                 }
             }
         }
@@ -233,7 +327,7 @@
     function recalculate() {
         fractionOfBody = calculateFractionOfBody();
         numberOfApplications = (+document.getElementById('applicationsperday').value) * 7 * (+document.getElementById('applicationweeks').value);
-        amount = fractionOfBody * CREAM_PER_BODY_APPLICATION * numberOfApplications;
+        amount = fractionOfBody * CREAM_PER_BODY_APPLICATION[bodysize] * numberOfApplications;
         document.getElementById('percentbodycovered').innerHTML = Math.round(fractionOfBody * 1000) / 10;
         document.getElementById('minimumamount').innerHTML = Math.round(amount);
 
@@ -342,12 +436,28 @@
                     </div>
                 </div>
                 <hr />
+                <div class="bodyregion row">
+                    <div class="bodyregiontext col col-12 col-md-2">Size</div>
+                    <div class="col col-12 col-sm-9 col-md-7 btn-group">
+                        <button type="button" class="btn btn-outline-dark active" onclick="afterSizeButtonPressed(this)">Adult</button>
+                        <button type="button" class="btn btn-outline-dark" onclick="afterSizeButtonPressed(this)">Child (age 5)</button>
+                        <button type="button" class="btn btn-outline-dark" onclick="afterSizeButtonPressed(this)">Infant</button>
+                    </div>
+                </div>
+                <hr />
                 <div class='row output'>
                     <div class="col col-12 col-md-6">
                         <strong>Percent of body covered:</strong> <span id="percentbodycovered"></span>&#37;
                     </div>
                     <div class="col col-12 col-md-6">
                         <strong>Minimum amount:</strong> <span id="minimumamount"></span> grams
+                    </div>
+                    <div class="col col-12">
+                        <em>Sources:
+                            <a href="https://www.uptodate.com/contents/image?imageKey=SURG%2F71190#!" target="_blank">UpToDate</a>
+                            <span> and </span>
+                            <a href="https://dermnetnz.org/topics/fingertip-unit" target="_blank">DermNet NZ</a>
+                        </em>
                     </div>
                 </div>
             </div>
